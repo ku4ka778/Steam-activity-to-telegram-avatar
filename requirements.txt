@@ -1,0 +1,4 @@
+bs4
+telethon
+pillow
+requests
