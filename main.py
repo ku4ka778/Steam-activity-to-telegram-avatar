@@ -71,6 +71,7 @@ try:
                     time_raw = dt.datetime.now()  # Getting data
                     time = time_raw.strftime('%H:%M:%S')
 
+                    steam_status = str(isPlaying[0])[36:][:-6]
 
                     game_name_raw = soup.find_all('div', class_='profile_in_game_name')  # Getting game name
                     game_name = str(game_name_raw[0])[41:][:-9]
