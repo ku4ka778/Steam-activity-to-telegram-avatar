@@ -21,7 +21,7 @@ config.read('settings.ini')
 # Getting tg info
 api_id = config["TG"]["api_id"]
 api_hash = config["TG"]["api_hash"]
-user_id = config["TG"]["user_id"]
+user_tg_id = int(config["TG"]["user_id"])
 session_name = 'anon'  # Name for your session file
 client = TelegramClient(session_name, int(api_id), api_hash)
 
@@ -39,10 +39,9 @@ try:
     while True:
 
 
-
-        async def get_avatar_image(user_id_or_username, output_path='avatar.jpg'):
+        async def get_avatar_image(user_tg_id, output_path='avatar.jpg'):
             # Getting user entity
-            entity = await client.get_entity(user_id_or_username)
+            entity = await client.get_entity(user_tg_id)
 
             # Getting user's profile photos
             photos = await client(functions.photos.GetUserPhotosRequest(
@@ -72,7 +71,6 @@ try:
                     time_raw = dt.datetime.now()  # Getting data
                     time = time_raw.strftime('%H:%M:%S')
 
-                    steam_status = str(isPlaying[0])[36:][:-6]
 
                     game_name_raw = soup.find_all('div', class_='profile_in_game_name')  # Getting game name
                     game_name = str(game_name_raw[0])[41:][:-9]
@@ -168,8 +166,8 @@ try:
 
 
 
-        async def main():
-            await get_avatar_image(user_id)
+        async def main(user_tg_id):
+            await get_avatar_image(user_tg_id)
             while True:
                 steam_status_check()
                 text_to_draw = steam_status_check()
@@ -182,7 +180,7 @@ try:
 
         if __name__ == "__main__":
             with client:
-                client.loop.run_until_complete(main())
+                client.loop.run_until_complete(main(user_tg_id))
 
 except KeyboardInterrupt:
     print("\nKeyboardInterrupt caught! Program is exiting gracefully.")
